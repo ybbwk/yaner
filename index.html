@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">掩耳 Yaner — 下载管理器</title>
+    <meta name="description" content="跨平台下载管理器。多线程下载、磁力链接、BT 协议，开箱即用。">
+    <link rel="icon" href="icon.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-dim: #8b949e;
+            --accent: #58a6ff;
+            --radius: 8px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 14px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover { color: var(--text); }
+
+        .lang-toggle {
+            padding: 5px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .lang-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 40px 80px;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 6vw, 64px);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .accent { color: var(--accent); }
+
+        .hero-sub {
+            font-size: 16px;
+            color: var(--text-dim);
+            max-width: 560px;
+            margin-bottom: 36px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: inherit;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0d1117;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn.disabled,
+        .btn-outline.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .stats {
+            display: flex;
+            gap: 48px;
+            margin-top: 64px;
+        }
+
+        .stat-item { text-align: center; }
+
+        .stat-num {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        section {
+            padding: 80px 40px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .section-sub {
+            color: var(--text-dim);
+            font-size: 15px;
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .tech-list {
+            display: flex;
+            justify-content: center;
+            gap: 36px;
+            padding: 32px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin: 0 40px;
+            flex-wrap: wrap;
+        }
+
+        .tech-item {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .tech-item strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .download-section {
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .download-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .download-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .download-card h4 {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .download-card p {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+        }
+
+        .download-card .btn {
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 48px 40px;
+            color: var(--text-dim);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 12px 20px; }
+            .nav-links { display: none; }
+            .hero { padding: 100px 20px 60px; }
+            .features-grid,
+            .download-cards {
+                grid-template-columns: 1fr;
+            }
+            .stats { flex-direction: column; gap: 20px; }
+            section { padding: 60px 20px; }
+            .tech-list { gap: 20px; margin: 0 20px; }
+            .hero-actions { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" class="nav-brand">
+            <img src="icon.png" alt="Yaner">
+            掩耳
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features" data-i18n="nav.features">功能</a></li>
+            <li><a href="#download" data-i18n="nav.download">下载</a></li>
+            <li><a href="changelog.html" data-i18n="nav.changelog">更新日志</a></li>
+            <li><a href="https://github.com/ybbwk/yaner" target="_blank" data-i18n="nav.github">GitHub</a></li>
+        </ul>
+        <button class="lang-toggle" onclick="toggleLang()">EN</button>
+    </nav>
+
+    <section class="hero">
+        <h1>
+            <span data-i18n="hero.title">掩耳 <span class="accent">Yaner</span></span>
+        </h1>
+        <p class="hero-sub" data-i18n="hero.desc">基于 aria2 的下载管理器。多线程分片、BT/磁力链接，开箱即用。</p>
+        <div class="hero-actions">
+            <a href="#download" class="btn btn-primary" data-i18n="hero.dl">下载</a>
+            <a href="https://github.com/ybbwk/yaner" class="btn btn-outline" data-i18n="hero.github">GitHub</a>
+        </div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-num" data-i18n="stat.desc">多线程</div>
+                <div class="stat-label" data-i18n="stat.desc-label">最高 64 线程</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-i18n="stat.cross">跨平台</div>
+                <div class="stat-label" data-i18n="stat.cross-label">Windows / macOS / Linux</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-i18n="stat.bt">BT / 磁力</div>
+                <div class="stat-label" data-i18n="stat.bt-label">开箱即用</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="tech-list">
+        <div class="tech-item" data-i18n="tech.rust"><strong>Rust</strong> 核心引擎</div>
+        <div class="tech-item" data-i18n="tech.aria2"><strong>aria2</strong> 下载后端</div>
+        <div class="tech-item" data-i18n="tech.tauri"><strong>Tauri</strong> 桌面 UI</div>
+        <div class="tech-item" data-i18n="tech.react"><strong>React</strong> 前端框架</div>
+        <div class="tech-item" data-i18n="tech.mit"><strong>MIT</strong> 开源协议</div>
+    </div>
+
+    <section id="features">
+        <h2 class="section-title" data-i18n="features.title">功能</h2>
+        <p class="section-sub" data-i18n="features.desc">该有的都有，不该有的一个没有。</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3 data-i18n="f.speed">多线程下载</h3>
+                <p data-i18n="f.speed.desc">文件分片，多线程并行，最高支持 64 线程。跑满带宽。</p>
+            </div>
+            <div class="feature-card">
+                <h3 data-i18n="f.bt">BT / 磁力链接</h3>
+                <p data-i18n="f.bt.desc">磁力链接和 torrent 文件下载，开箱即用，无需额外配置。</p>
+            </div>
+            <div class="feature-card">
+                <h3 data-i18n="f.cross">跨平台</h3>
+                <p data-i18n="f.cross.desc">Windows、macOS、Linux，同一套界面，同一套体验。</p>
+            </div>
+            <div class="feature-card">
+                <h3 data-i18n="f.i18n">中英文切换</h3>
+                <p data-i18n="f.i18n.desc">简体中文和英文原生支持，设置里一键切换。</p>
+            </div>
+            <div class="feature-card">
+                <h3 data-i18n="f.browser">浏览器集成</h3>
+                <p data-i18n="f.browser.desc">Chrome/Edge 扩展，自动捕获下载链接。</p>
+            </div>
+            <div class="feature-card">
+                <h3 data-i18n="f.shutdown">完成后关机</h3>
+                <p data-i18n="f.shutdown.desc">下载队列清空后自动关机，带倒计时，可取消。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="download-section">
+        <h2 class="section-title" data-i18n="dl.title">下载</h2>
+        <p class="section-sub" style="margin-left:auto;margin-right:auto;text-align:center;" data-i18n="dl.sub">选择你的平台。</p>
+        <div class="download-cards">
+            <div class="download-card">
+                <h4>Windows</h4>
+                <p data-i18n="dl.win.note">Windows 10+ (x64)</p>
+                <a href="#" class="btn btn-outline" data-i18n="dl.win">下载</a>
+            </div>
+            <div class="download-card">
+                <h4>macOS</h4>
+                <p data-i18n="dl.mac.note">macOS 12+ (Apple Silicon)</p>
+                <a href="#" class="btn btn-outline disabled" data-i18n="dl.mac">敬请期待</a>
+            </div>
+            <div class="download-card">
+                <h4>Linux</h4>
+                <p data-i18n="dl.linux.note">Debian/Ubuntu (x64)</p>
+                <a href="#" class="btn btn-outline disabled" data-i18n="dl.linux">敬请期待</a>
+            </div>
+        </div>
+        <p style="color: var(--text-dim); font-size: 13px; margin-top: 24px;" data-i18n="dl.note">安装包已包含下载引擎，开箱即用。</p>
+    </section>
+
+    <footer>
+        <p>© 2026 Yaner</p>
+        <p style="margin-top: 4px;" data-i18n="footer.license">基于 MIT 协议开源 · <a href="https://github.com/yaner/yaner">GitHub</a></p>
+    </footer>
+
+    <script>
+        const i18n = {
+            zh: {
+                'nav.features': '功能',
+                'nav.download': '下载',
+                'nav.changelog': '更新日志',
+                'nav.github': 'GitHub',
+                'hero.title': '掩耳 <span class="accent">Yaner</span>',
+                'hero.desc': '基于 aria2 的下载管理器。多线程分片、BT/磁力链接，开箱即用。',
+                'hero.dl': '下载',
+                'hero.github': 'GitHub',
+                'stat.desc': '多线程',
+                'stat.desc-label': '最高 64 线程',
+                'stat.cross': '跨平台',
+                'stat.cross-label': 'Windows / macOS / Linux',
+                'stat.bt': 'BT / 磁力',
+                'stat.bt-label': '开箱即用',
+                'tech.rust': '<strong>Rust</strong> 核心引擎',
+                'tech.aria2': '<strong>aria2</strong> 下载后端',
+                'tech.tauri': '<strong>Tauri</strong> 桌面 UI',
+                'tech.react': '<strong>React</strong> 前端框架',
+                'tech.mit': '<strong>MIT</strong> 开源协议',
+                'features.title': '功能',
+                'features.desc': '该有的都有，不该有的一个没有。',
+                'f.speed': '多线程下载',
+                'f.speed.desc': '文件分片，多线程并行，最高支持 64 线程。跑满带宽。',
+                'f.bt': 'BT / 磁力链接',
+                'f.bt.desc': '磁力链接和 torrent 文件下载，开箱即用，无需额外配置。',
+                'f.cross': '跨平台',
+                'f.cross.desc': 'Windows、macOS、Linux，同一套界面，同一套体验。',
+                'f.i18n': '中英文切换',
+                'f.i18n.desc': '简体中文和英文原生支持，设置里一键切换。',
+                'f.browser': '浏览器集成',
+                'f.browser.desc': 'Chrome/Edge 扩展，自动捕获下载链接。',
+                'f.shutdown': '完成后关机',
+                'f.shutdown.desc': '下载队列清空后自动关机，带倒计时，可取消。',
+                'dl.title': '下载',
+                'dl.sub': '选择你的平台。',
+                'dl.win': '下载',
+                'dl.win.note': 'Windows 10+ (x64)',
+                'dl.mac': '敬请期待',
+                'dl.mac.note': 'macOS 12+ (Apple Silicon)',
+                'dl.linux': '敬请期待',
+                'dl.linux.note': 'Debian/Ubuntu (x64)',
+                'dl.note': '安装包已包含下载引擎，开箱即用。',
+                'footer.license': '基于 MIT 协议开源 · <a href="https://github.com/ybbwk/yaner">GitHub</a>',
+            },
+            en: {
+                'nav.features': 'Features',
+                'nav.download': 'Download',
+                'nav.changelog': 'Changelog',
+                'nav.github': 'GitHub',
+                'hero.title': 'Yaner',
+                'hero.desc': 'A download manager built on aria2. Multi-threaded, BT/magnet, just works.',
+                'hero.dl': 'Download',
+                'hero.github': 'GitHub',
+                'stat.desc': 'Multi-thread',
+                'stat.desc-label': 'Up to 64 connections',
+                'stat.cross': 'Cross-platform',
+                'stat.cross-label': 'Windows / macOS / Linux',
+                'stat.bt': 'BT / Magnet',
+                'stat.bt-label': 'Works out of the box',
+                'tech.rust': '<strong>Rust</strong> core engine',
+                'tech.aria2': '<strong>aria2</strong> download backend',
+                'tech.tauri': '<strong>Tauri</strong> desktop UI',
+                'tech.react': '<strong>React</strong> frontend',
+                'tech.mit': '<strong>MIT</strong> license',
+                'features.title': 'Features',
+                'features.desc': 'Everything you need, nothing you don\'t.',
+                'f.speed': 'Multi-threaded',
+                'f.speed.desc': 'File splitting with parallel threads, up to 64 connections.',
+                'f.bt': 'BT / Magnet Links',
+                'f.bt.desc': 'Magnet links and torrent files, no extra config needed.',
+                'f.cross': 'Cross-platform',
+                'f.cross.desc': 'Windows, macOS, Linux — same UI, same experience.',
+                'f.i18n': 'Chinese & English',
+                'f.i18n.desc': 'Native support for both languages. Switch anytime.',
+                'f.browser': 'Browser Extension',
+                'f.browser.desc': 'Chrome/Edge extension that auto-captures download links.',
+                'f.shutdown': 'Auto Shutdown',
+                'f.shutdown.desc': 'Shutdown after all downloads finish. Countdown, cancel anytime.',
+                'dl.title': 'Download',
+                'dl.sub': 'Pick your platform.',
+                'dl.win': 'Download',
+                'dl.win.note': 'Windows 10+ (x64)',
+                'dl.mac': 'Coming Soon',
+                'dl.mac.note': 'macOS 12+ (Apple Silicon)',
+                'dl.linux': 'Coming Soon',
+                'dl.linux.note': 'Debian/Ubuntu (x64)',
+                'dl.note': 'Installer includes the download engine.',
+                'footer.license': 'Open source under MIT · <a href="https://github.com/ybbwk/yaner">GitHub</a>',
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+            document.getElementById('page-title').textContent = lang === 'zh' ? '掩耳 Yaner — 下载管理器' : 'Yaner — Download Manager';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    el.innerHTML = i18n[lang][key];
+                }
+            });
+
+            document.querySelector('.lang-toggle').textContent = lang === 'zh' ? 'EN' : '中文';
+        }
+
+        function toggleLang() {
+            setLang(currentLang === 'zh' ? 'en' : 'zh');
+        }
+    </script>
+</body>
+</html>
