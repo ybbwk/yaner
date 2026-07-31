@@ -4,7 +4,7 @@
   "pub_date": "2026-07-27",
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/yaner/yaner/releases/download/v0.1.0/yaner-ui.exe",
+      "url": "https://github.com/ybbwk/yaner/releases/latest",
       "size": 0
     }
   }
