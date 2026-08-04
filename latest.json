@@ -1,7 +1,7 @@
 {
-  "version": "0.1.1",
-  "notes": "Fixed database init on fresh install",
-  "pub_date": "2026-08-02",
+  "version": "0.1.2",
+  "notes": "Double-click to open completed tasks; startup splash screen; fix multiple tray icons on Windows; macOS build fix",
+  "pub_date": "2026-08-04",
   "platforms": {
     "windows-x86_64": {
       "url": "https://github.com/ybbwk/yaner/releases/latest",
