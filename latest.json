@@ -1,7 +1,7 @@
 {
-  "version": "0.1.2",
-  "notes": "Double-click to open completed tasks; startup splash screen; fix multiple tray icons on Windows; macOS build fix",
-  "pub_date": "2026-08-04",
+  "version": "0.1.3",
+  "notes": "Fix opening completed tasks; persist real download path in database",
+  "pub_date": "2026-08-06",
   "platforms": {
     "windows-x86_64": {
       "url": "https://github.com/ybbwk/yaner/releases/latest",

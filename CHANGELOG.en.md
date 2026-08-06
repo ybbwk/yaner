@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.3 (2026-08-06)
+
+- Fixed: error when opening completed tasks
+- Improved: persist real download path in database, opening/deleting files stays accurate after restart
+
 ## v0.1.2 (2026-08-04)
 
 - Added: double-click to run completed tasks; "Open" item in context menu
