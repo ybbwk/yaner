@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.2.0 (2026-09-20)
+
+- Added: UPnP port mapping — automatically open router ports for faster BT downloads
+- Added: Mirror discovery — find mirrors for the same file and download from multiple sources
+- Fixed: magnet link / torrent preview unable to parse file list
+- Fixed: shutdown countdown reaching zero but not executing shutdown
+- Fixed: Windows command window flashing when manually shutting down
+- Improved: shutdown timer moved to backend — works even when window is closed
+
 ## v0.1.3 (2026-08-06)
 
 - Fixed: error when opening completed tasks

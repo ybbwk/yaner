@@ -1,7 +1,7 @@
 {
-  "version": "0.1.3",
-  "notes": "Fix opening completed tasks; persist real download path in database",
-  "pub_date": "2026-08-06",
+  "version": "0.2.0",
+  "notes": "UPnP port mapping, mirror discovery multi-source download, shutdown timer moved to backend",
+  "pub_date": "2026-09-20",
   "platforms": {
     "windows-x86_64": {
       "url": "https://github.com/ybbwk/yaner/releases/latest",
