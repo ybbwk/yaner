@@ -1,7 +1,7 @@
 {
-  "version": "0.2.0",
-  "notes": "UPnP port mapping, mirror discovery multi-source download, shutdown timer moved to backend",
-  "pub_date": "2026-09-20",
+  "version": "0.3.0",
+  "notes": "Status bar, configurable engine ports with auto-fallback, and a batch of reliability fixes",
+  "pub_date": "2026-10-06",
   "platforms": {
     "windows-x86_64": {
       "url": "https://github.com/ybbwk/yaner/releases/latest",
