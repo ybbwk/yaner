@@ -1,9 +1,23 @@
 # Changelog
 
+## v0.3.1 (2026-10-12)
+
+- Fixed: UPnP port mapping could block task creation for up to 200 seconds on networks without a UPnP router
+- Fixed: UPnP cleanup during exit could exhaust the budget, leaving aria2c running
+- Fixed: aria2c graceful-exit budget was counted per port, reaching up to 9 seconds
+- Fixed: closing the BT dialog while confirming would delete the task just created
+- Improved: UPnP port mapping is now asynchronous and no longer delays task creation
+- Improved: download engine is prewarmed at startup, so creating a task no longer waits for it
+- Improved: only the confirm button is disabled during submission, with a loading indicator; the dialog stays closable
+- Improved: shutdown cleanup is idempotent and unified across tray, menu bar and the exit command
+- Improved: aria2c readiness probe now checks before waiting, removing one poll interval from cold start
+- Maintenance: no longer delete mappings this run never created, avoiding removal of other apps' rules on the same ports
+
 ## v0.3.0 (2026-10-06)
 
 - Added: bottom status bar showing engine state, RPC port, BT listen port, UPnP mapping result and live speed
 - Added: download engine RPC port and BT/DHT listen port are configurable, with automatic fallback when occupied
+- Added: the "new version available" notice itself is clickable and opens the download page in the system browser
 - Fixed: app completely unusable when the engine port was already in use
 - Fixed: unreliable aria2c engine startup and shutdown
 - Fixed: download confirm button double-submit creating duplicate tasks
@@ -14,6 +28,7 @@
 - Fixed: deleting a task could remove control files of other tasks sharing the same directory
 - Fixed: magnet metadata wait was a fixed 30s with indistinguishable errors; now 15s with graded messages
 - Fixed: mirror discovery had no timeout and could block task creation
+- Improved: opening a download link on Windows no longer flashes a console window
 - Maintenance: dropped unused gRPC dependencies (tonic/prost), declared MSRV, committed Cargo.lock
 - Maintenance: upgraded rusqlite / config / dirs / toml; frontend upgraded to React 19 and Vite 8
 
