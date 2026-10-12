@@ -14,6 +14,7 @@
 - Improved: website, software license and open source license are now plain hyperlinks in the About dialog
 - Improved: text fields use a custom context menu that no longer exposes browser developer tools
 - Improved: added an "Open Website" entry to the About dialog
+- Improved: update check results are shown on the About page directly, without an extra dialog
 - Maintenance: corrected the option types sent to aria2 (`auto-file-renaming`, `bt-stop-timeout`); automatic renaming of same-named files may not have taken effect before
 
 ## v0.3.1 (2026-10-12)
