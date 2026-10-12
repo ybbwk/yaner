@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.3.2 (2026-10-12)
+
+- Fixed: creating a task always failed with "Unauthorized" — the aria2c RPC token was placed last in the parameter array and failed authentication
+- Fixed: an aria2c left behind after a crash could never be reclaimed, so the occupied port prevented all later downloads
+- Fixed: "Software License" and "Open Source License" in the About dialog reported a missing file
+- Fixed: license files were named inconsistently between the MSI and NSIS installers
+- Fixed: a blank terminal window flashed when playing the completion sound
+- Fixed: double-clicking a finished task or using the right-click "Open" reported "Windows cannot find the file"
+- Fixed: "Paste" in the text field context menu did nothing
+- Fixed: trackpad two-finger scrolling produced a web-style rubber band effect at the edges
+- Fixed: a terminal window flashed before the browser opened from the About dialog
+- Improved: website, software license and open source license are now plain hyperlinks in the About dialog
+- Improved: text fields use a custom context menu that no longer exposes browser developer tools
+- Improved: added an "Open Website" entry to the About dialog
+- Maintenance: corrected the option types sent to aria2 (`auto-file-renaming`, `bt-stop-timeout`); automatic renaming of same-named files may not have taken effect before
+
 ## v0.3.1 (2026-10-12)
 
 - Fixed: UPnP port mapping could block task creation for up to 200 seconds on networks without a UPnP router

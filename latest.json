@@ -1,6 +1,6 @@
 {
-  "version": "0.3.1",
-  "notes": "Async UPnP mapping, engine prewarm, reliable aria2c shutdown, non-blocking task dialogs",
+  "version": "0.3.2",
+  "notes": "Fix task creation failing with Unauthorized; working clipboard paste; no more terminal popups; smooth trackpad scrolling",
   "pub_date": "2026-10-12",
   "platforms": {
     "windows-x86_64": {
